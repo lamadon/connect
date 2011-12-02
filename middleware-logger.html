@@ -46,7 +46,7 @@
 <pre><code> connect.logger() // default
  connect.logger(&#39;short&#39;)
  connect.logger(&#39;tiny&#39;)
- connect.logger(&#39;dev&#39;)
+ connect.logger({ immediate: true, format: &#39;dev&#39; })
  connect.logger(&#39;:method :url - :referrer&#39;)
  connect.logger(&#39;:req[content-type] -&gt; :res[content-type]&#39;)
  connect.logger(function(req, res){ return &#39;some format string&#39; })</code></pre>
@@ -164,8 +164,8 @@ exports = module.exports = function logger(options) {
       var line = fmt(exports, req, res);
       if (null == line) return;
       stream.write(line + '\n', 'ascii');
+    // proxy end to output logging
     } else {
-      // proxy end to output loggging
       var end = res.end;
       res.end = function(chunk, encoding){
         res.end = end;

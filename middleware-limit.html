@@ -33,8 +33,6 @@ for example &quot;5mb&quot;, &quot;200kb&quot;, &quot;1gb&quot;, etc.</p>
 <pre><code>var server = connect(
   connect.limit(&#39;5.5mb&#39;)
 ).listen(3000);</code></pre>
-
-<h2>TODO pause EV_READ</h2>
               </div>
             
 
@@ -95,11 +93,7 @@ module.exports = function limit(bytes){
     req._limit = true;
 
     // limit by content-length
-    if (len && len > bytes) {
-      res.statusCode = 413;
-      res.end('Request Entity Too Large');
-      return;
-    }
+    if (len && len > bytes) return next(utils.error(413));
 
     // limit
     req.on('data', function(chunk){

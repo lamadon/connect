@@ -23,14 +23,17 @@
           <div class="comment">
             
             <p class="description"><p>Parse <em>Cookie</em> header and populate <code>req.cookies</code>
-with an object keyed by the cookie names.</p></p>
+with an object keyed by the cookie names. Optionally
+you may enabled signed cookie support by passing
+a <code>secret</code> string, which assigns <code>req.secret</code> so
+it may be used by other middleware such as <code>session()</code>.</p></p>
 
             
               <div class="body">
                 <h2>Examples</h2>
 
 <pre><code>connect.createServer(
-    connect.cookieParser()
+    connect.cookieParser(&#39;keyboard cat&#39;)
   , function(req, res, next){
     res.end(JSON.stringify(req.cookies));
   }
@@ -40,6 +43,16 @@ with an object keyed by the cookie names.</p></p>
 
             
               <ul class="tags">
+              
+                
+
+                
+
+                
+
+                
+                  <li class="param"><em>param</em> <span class="types">String</span> <span class="name">secret</span> <span class="description"></span></li>
+                
               
                 
                   <li class="return"><em>returns</em> <span class="types">Function</span></li>

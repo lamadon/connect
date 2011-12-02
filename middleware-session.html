@@ -23,8 +23,6 @@
         
         
         
-        
-        
           <div class="comment">
             
             <p class="description"><p>Setup session store with the given <code>options</code>.</p></p>
@@ -38,22 +36,13 @@ middleware <em>before</em> <code>session()</code>.</p>
 <h2>Examples</h2>
 
 <pre><code>connect.createServer(
-    connect.cookieParser()
-  , connect.session({ secret: &#39;keyboard cat&#39; })
+    connect.cookieParser(&#39;keyboard cat&#39;)
+  , connect.session({ key: &#39;sid&#39; })
 );</code></pre>
 
 <h2>Options</h2>
 
-<ul><li><code>key</code>           cookie name defaulting to <code>connect.sid</code></li><li><code>store</code>         Session store instance</li><li><code>fingerprint</code>   Custom fingerprint generating function</li><li><code>cookie</code>        Session cookie settings, defaulting to <code>{ path: &#39;/&#39;, httpOnly: true, maxAge: 14400000 }</code></li><li><code>secret</code>        Secret string used to compute hash</li></ul>
-
-<h2>Ignore Paths</h2>
-
-<p> By default <code>/favicon.ico</code> is the only ignored path, all others
- will utilize sessions, to manipulate the paths ignored, use
-<code>connect.session.ignore.push(&#39;/my/path&#39;)</code>. This works for <em>full</em>
- pathnames only, not segments nor substrings.</p>
-
-<pre><code>connect.session.ignore.push(&#39;/robots.txt&#39;);</code></pre>
+<ul><li><code>key</code>           cookie name defaulting to <code>connect.sid</code></li><li><code>store</code>         Session store instance</li><li><code>cookie</code>        Session cookie settings, defaulting to <code>{ path: &#39;/&#39;, httpOnly: true, maxAge: 14400000 }</code></li></ul>
 
 <h2>req.session</h2>
 
@@ -61,11 +50,11 @@ middleware <em>before</em> <code>session()</code>.</p>
  which is (generally) serialized as JSON by the store, so nested objects 
  are typically fine. For example below is a user-specific view counter:</p>
 
-<pre><code>  connect(
-      connect.cookieParser()
-    , connect.session({ secret: &#39;keyboard cat&#39;, cookie: { maxAge: 60000 }})
-    , connect.favicon()
-    , function(req, res, next){
+<pre><code>  connect()
+    .use(connect.favicon())
+    .use(connect.cookieParser(&#39;keyboard cat&#39;))
+    .use(connect.session({ cookie: { maxAge: 60000 }}))
+    .use(function(req, res, next){
       var sess = req.session;
       if (sess.views) {
         res.setHeader(&#39;Content-Type&#39;, &#39;text/html&#39;);
@@ -78,7 +67,7 @@ middleware <em>before</em> <code>session()</code>.</p>
         res.end(&#39;welcome to the session demo. refresh!&#39;);
       }
     }
-  ).listen(3000);</code></pre>
+  )).listen(3000);</code></pre>
 
 <h2>Session#regenerate()</h2>
 
